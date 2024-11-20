@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  Well_Xray:
+    # platform: linux/arm64/v8
+    image: well_xray
+    hostname: well_xray
+    restart: always
+    build:
+      dockerfile: dockerfile
+    ports:
+    - 8501:8501
+    volumes:
+      - ./app:/app
+    environment:
+      - TZ=Asia/Bangkok
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
