@@ -31,7 +31,8 @@ This Artificially Intelligent (AI) system is intended to be used for supporting 
 The AI results cannot be constructed as a statement  and cannot be used for any legal purposes."""
 
 # checkpoint = 'save/pylon_densenet169_ImageNet_1024/0/best'
-name = 'pylon_densenet169_ImageNet_1024_selectRad_V2'
+# name = 'pylon_densenet169_ImageNet_1024_selectRad_V2'
+name = 'pylon_resnet50_vin1024'
 checkpoint = f'save/onnx/{name}.onnx'
 # checkpoint_flush = f'save/onnx/{name}_flush.onnx'
 
@@ -57,38 +58,43 @@ print('onnxruntime device:', onnxruntime.get_device())
 #                                 size=size,
 #                                 interpolation=interpolation)
 
-threshold_df = pd.read_json(f'./save/threshold/{name}_combine_threshold.json')
+# threshold_df = pd.read_json(f'./save/threshold/{name}_combine_threshold.json')
+threshold_df = pd.read_json(f'./save/threshold/vin_cls_v3_val_threshold.json')
 threshold_dict = threshold_df['G-Mean'].to_dict()
 # threshold_dict = threshold_df['F1_Score'].to_dict()
 CATEGORIES = list(threshold_dict.keys())
+# print(CATEGORIES)
 class_dict = {cls:i for i, cls in enumerate(CATEGORIES)}
 # df_json = pd.read_json('./save/temperature_parameter.json')
 # temperature_dict = df_json['Temperature'].to_dict()
 
 # Val prediction for make percentile
-with open('save/val_predict/out_val_selectRad_data_pylon_densenet169_ImageNet_1024_V2_0.p', 'rb') as fp:
-    val_predict = pickle.load(fp)
-pred_val = val_predict['pred']
+# with open('save/val_predict/out_val_selectRad_data_pylon_densenet169_ImageNet_1024_V2_0.p', 'rb') as fp:
+#     val_predict = pickle.load(fp)
+# pred_val = val_predict['pred']
+
+
+class_proba = [finding+'_proba' for finding in CATEGORIES]
+    
+pred_val = pd.read_csv('save/val_predict/vin_cls_v3_val.csv', usecols=class_proba).values
 
 focusing_finding = [
-                    # 'Osteoporosis', 
-                    # 'No Finding', 
-                    'Pneumothorax', 
-#                     'Pneumomediastinum', 'Pneumopericardium',
-                    # 'Mass', 
-                    'Nodule', 
-                    # 'Mediastinal Mass', 
-                    'Lung Opacity', 
-                    'Pleural Effusion', 
-                    # 'Atelectasis', 
-#                     'Airway Narrowing', 
-                    # 'Tracheal-Mediastinal Shift', 'Volume Loss', 
-                    # 'Osteolytic Lesion', 'Fracture', 'Sclerotic Lesion', 
-#                     'Air-filled Space', 
-                    'Cardiomegaly', 
-                    # 'Bronchiectasis',
-#                     'Increased Lung Volume'
-                   ]
+    # 'Aortic enlargement', 
+    # 'Atelectasis', 
+    # 'Calcification', 
+    'Cardiomegaly', 
+    # 'Consolidation', 
+    # 'ILD', 
+    # 'Infiltration', 
+    'Lung Opacity', 
+    'Nodule/Mass', 
+    # 'Other lesion', 
+    'Pleural effusion', 
+    # 'Pleural thickening', 
+    'Pneumothorax', 
+    # 'Pulmonary fibrosis', 
+    # 'No finding'
+    ]
 focusing_finding_dict = {cls:i for i, cls in enumerate(focusing_finding)}
 
 def sigmoid_array(x):
@@ -210,6 +216,9 @@ def predict(image, net_predict, threshold_dict, class_dict):
     # pred = torch.from_numpy(pred)
     # seg= torch.from_numpy(seg)
     pred, seg = sigmoid_array(pred), sigmoid_array(seg)
+    print("Predict shape:")
+    print("pred.shape:", pred.shape)
+    print("pred_seg.shape:", seg.shape)
 
     # Interpolation
     # seg = cv2.resize(seg, (1024, 1024), interpolation=cv2.INTER_LINEAR)
@@ -247,7 +256,8 @@ def predict(image, net_predict, threshold_dict, class_dict):
 
     df_prob_class = pd.DataFrame(y_uncalibrated, columns=CATEGORIES) # To use risk score from raw value of model
 
-    risk_dict = {'risk_score': 1-df_prob_class['No Finding'].values[0]}
+    risk_dict = {'risk_score': 1- df_prob_class['No finding'].values[0]}
+    
     all_pred_df = get_all_pred_df(CATEGORIES, y_calibrated, y_uncalibrated, threshold_dict)
     
     return pred, seg, all_pred_class, all_pred_df, risk_dict
@@ -355,7 +365,8 @@ def get_multiclass_heatmap(img, all_pred_df, seg, class_dict, findings):
             Prob = all_pred_df[all_pred_df.Finding == finding]['Confidence'].values[0]
             threshold = all_pred_df[all_pred_df.Finding == finding]['Threshold'].values[0]
             print(f"{finding}: Threshold:{threshold:.3f}, Prob: {Prob:.3f}")
-            if Prob >= threshold:
+            # if Prob >= threshold:
+            if Prob >= 0.5:
                 Confidence = f'{Prob:.0%}'
             else:
                 Confidence = 'Low'

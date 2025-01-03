@@ -1,0 +1,53 @@
+{
+    "G-Mean":{
+        "Aortic enlargement":0.08137427,
+        "Atelectasis":0.017343413,
+        "Calcification":0.025663523,
+        "Cardiomegaly":0.12812127,
+        "Consolidation":0.023202403,
+        "ILD":0.022583663,
+        "Infiltration":0.034302026,
+        "Lung Opacity":0.07028819,
+        "Nodule\/Mass":0.0421081,
+        "Other lesion":0.06013217,
+        "Pleural effusion":0.04791121,
+        "Pleural thickening":0.08762981,
+        "Pneumothorax":0.0024281207,
+        "Pulmonary fibrosis":0.083578266,
+        "No finding":0.7235142
+    },
+    "F1_Score":{
+        "Aortic enlargement":0.45314994,
+        "Atelectasis":0.2934444,
+        "Calcification":0.16079365,
+        "Cardiomegaly":0.25202283,
+        "Consolidation":0.48159537,
+        "ILD":0.15051444,
+        "Infiltration":0.12442335,
+        "Lung Opacity":0.19944026,
+        "Nodule\/Mass":0.37189394,
+        "Other lesion":0.17811301,
+        "Pleural effusion":0.2557271,
+        "Pleural thickening":0.29321632,
+        "Pneumothorax":0.4058838,
+        "Pulmonary fibrosis":0.24148491,
+        "No finding":0.24395075
+    },
+    "F2_Score":{
+        "Aortic enlargement":0.08137427,
+        "Atelectasis":0.06602487,
+        "Calcification":0.08842192,
+        "Cardiomegaly":0.12812127,
+        "Consolidation":0.12854883,
+        "ILD":0.09548248,
+        "Infiltration":0.107579485,
+        "Lung Opacity":0.07028819,
+        "Nodule\/Mass":0.10485526,
+        "Other lesion":0.084194675,
+        "Pleural effusion":0.065612614,
+        "Pleural thickening":0.08762981,
+        "Pneumothorax":0.4058838,
+        "Pulmonary fibrosis":0.118704095,
+        "No finding":0.11517018
+    }
+}
