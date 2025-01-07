@@ -30,10 +30,14 @@ DISCLAIMER = """Disclaimer:
 This Artificially Intelligent (AI) system is intended to be used for supporting the chest radiographic interpretation in the case of Lung Opacity. The display results include only the relevant but neither specific nor supporting all significant findings. The final diagnosis must be correlated with the clinical data. This AI cannot substitute the standard radiologic report by the qualified radiologist.
 The AI results cannot be constructed as a statement  and cannot be used for any legal purposes."""
 
+# Get the directory of the current script or module
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
 # checkpoint = 'save/pylon_densenet169_ImageNet_1024/0/best'
 # name = 'pylon_densenet169_ImageNet_1024_selectRad_V2'
 name = 'pylon_resnet50_vin1024'
-checkpoint = f'save/onnx/{name}.onnx'
+path_checkpoint = f'save/onnx/{name}.onnx'
+checkpoint = os.path.join(current_dir, path_checkpoint)
 # checkpoint_flush = f'save/onnx/{name}_flush.onnx'
 
 size=1024
@@ -59,7 +63,8 @@ print('onnxruntime device:', onnxruntime.get_device())
 #                                 interpolation=interpolation)
 
 # threshold_df = pd.read_json(f'./save/threshold/{name}_combine_threshold.json')
-threshold_df = pd.read_json(f'./save/threshold/vin_cls_v3_val_threshold.json')
+threshold_path = 'save/threshold/vin_cls_v3_val_threshold.json'
+threshold_df = pd.read_json(os.path.join(current_dir, threshold_path))
 threshold_dict = threshold_df['G-Mean'].to_dict()
 # threshold_dict = threshold_df['F1_Score'].to_dict()
 CATEGORIES = list(threshold_dict.keys())
@@ -75,7 +80,8 @@ class_dict = {cls:i for i, cls in enumerate(CATEGORIES)}
 
 
 class_proba = [finding+'_proba' for finding in CATEGORIES]
-    
+
+print("Current directory:", os.getcwd())
 pred_val = pd.read_csv('save/val_predict/vin_cls_v3_val.csv', usecols=class_proba).values
 
 focusing_finding = [
