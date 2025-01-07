@@ -82,7 +82,8 @@ class_dict = {cls:i for i, cls in enumerate(CATEGORIES)}
 class_proba = [finding+'_proba' for finding in CATEGORIES]
 
 print("Current directory:", os.getcwd())
-pred_val = pd.read_csv('save/val_predict/vin_cls_v3_val.csv', usecols=class_proba).values
+val_path = 'save/val_predict/vin_cls_v3_val.csv'
+pred_val = pd.read_csv(os.path.join(current_dir, val_path), usecols=class_proba).values
 
 focusing_finding = [
     # 'Aortic enlargement', 
