@@ -16,3 +16,4 @@ python-gdcm==3.0.22
 # uvicorn 
 # aiofiles
 pickle5
+matplotlib==3.9.2

@@ -63,7 +63,7 @@ df_labeller = df_labeller.reset_index(drop=True).sort_values('image_id')
 #     print("Remove file:", f)
 # root_dicom = 'save/Sample_Dicom_Present_png'
 # root_dicom = 'sample_cxr_with_finding/Sample Data/Osteoporisis'
-root_dicom = 'sampled_images'
+root_dicom = os.path.join(current_dir, 'sampled_images')
 
 def welcome():
     # https://www.pluralsight.com/guides/deploying-image-classification-on-the-web-with-streamlit-and-heroku
