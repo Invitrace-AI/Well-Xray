@@ -71,7 +71,7 @@ def welcome():
     # col_img_1, col_img_2 = st.columns([1,2])
     # col_img_1.image('mmt_logo.jpeg',use_column_width='auto')
     # col_img_2.image('Invitrace LOGO-02.png',use_column_width='auto')
-    st.image('Invitrace_LOGO_02.png',use_column_width='auto')
+    st.image(os.path.join(current_dir, 'Invitrace_LOGO_02.png'),use_column_width='auto')
     st.title('AI-Assisted Rapid Chest Radiographs Reading')
     # st.header("Brain Tumor MRI Classification Example")
     st.subheader('An AI analysis application for abnormality detection on chest radiographs')
