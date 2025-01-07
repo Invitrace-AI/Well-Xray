@@ -9,6 +9,10 @@ import streamlit as st
 from FastAPI_Predict_CXR_ONNX_V2_1 import *
 import SessionState
 
+import os 
+# Get the directory of the current script or module
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
 # https://blog.streamlit.io/introducing-new-layout-options-for-streamlit/
 # https://docs.streamlit.io/en/stable/api.html?highlight=beta_set_page_config#streamlit.set_page_config
 # Use the full page instead of a narrow central column
@@ -32,7 +36,7 @@ img {
 
 # Annotation from radiologist
 # df_annot_bbox = pd.read_csv('save/csv/Annotated_bbox_chula_cxr_Sam_all.csv')
-df_annot_bbox = pd.read_csv('save/csv/Annotated_bbox_chula_cxr_Sam_all_new_ratio.csv')
+df_annot_bbox = pd.read_csv(os.path.join(current_dir, 'save/csv/Annotated_bbox_chula_cxr_Sam_all_new_ratio.csv'))
 df_annot_bbox.loc[:,'Image Index'] = df_annot_bbox['image_id'].apply(lambda x: x.replace('.dcm', '.png')) 
 df_group = df_annot_bbox.groupby(['image_id','rad_id']).agg({'class_name':lambda x: (x+', ').sum().strip(', ')})
 df_group_res = df_group.reset_index()
@@ -44,7 +48,7 @@ df_annot = df_group_res.copy()
 df_annot.loc[:,'class_name'] = df_annot['class_name'].apply(list)
 
 # Finding from labeller
-df_test_2_merge = pd.read_csv('save/csv/Chula_CXR_test_2_for_labelme_merge.csv')
+df_test_2_merge = pd.read_csv(os.path.join(current_dir, 'save/csv/Chula_CXR_test_2_for_labelme_merge.csv'))
 df_test_2_merge.loc[:,'image_id'] = df_test_2_merge['Image Index'].apply(lambda x: x.replace('.png', '.dcm')) 
 df_labeller = df_test_2_merge[df_test_2_merge['image_id'].isin(df_annot['image_id'])]
 df_labeller = df_labeller.reset_index(drop=True).sort_values('image_id')
