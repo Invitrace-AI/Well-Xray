@@ -116,7 +116,7 @@ class FileUpload(object):
             is_dcmformat = False
             is_imgformat = True
             self.image_name = file.name.split('/')[-1].replace('.png','.dcm')
-            st.write(state.dcm_name)
+            st.sidebar.write([name for name in state.dcm_name.split("_") if ".png" not in name])
 
 
 
