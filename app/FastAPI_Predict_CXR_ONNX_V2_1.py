@@ -67,6 +67,10 @@ threshold_path = 'save/threshold/vin_cls_v3_val_threshold.json'
 threshold_df = pd.read_json(os.path.join(current_dir, threshold_path))
 threshold_dict = threshold_df['G-Mean'].to_dict()
 # threshold_dict = threshold_df['F1_Score'].to_dict()
+
+# Temporary adjust Pneumothorax threshold
+threshold_dict['Pneumothorax'] *= 2
+
 CATEGORIES = list(threshold_dict.keys())
 # print(CATEGORIES)
 class_dict = {cls:i for i, cls in enumerate(CATEGORIES)}
